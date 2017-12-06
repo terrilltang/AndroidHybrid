@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>设置</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="./assets/js/lib/angular-ui-router.min.js"></script>
+  <script src="./assets/js/app.js"></script>
+  <script src="./assets/js/pages/personal.js"></script>
+</head>
+
+<body ng-app="ngAppPersonal">
+  <main ng-controller="personalCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="no-footer">
+    <form name="pwd_form" novalidate>
+      <header>
+        <a href="javascript:void(0);" class="opt prev" ng-if="'index' | isState" ng-click='showAside()'>
+          <i class="iconfont icon-menu"></i>
+        </a>
+        <a href="javascript:history.go(-1);" class="opt prev" ng-if="!('index' | isState)">
+          <i class="iconfont icon-arrow-left"></i>
+        </a>
+        <div class="title">
+          <h1 ng-if="'index' | isState">个人中心</h1>
+          <h1 ng-if="'profile' | isState">个人信息</h1>
+          <h1 ng-if="'editPwd' | isState">修改密码</h1>
+          <h1 ng-if="'orgList' | isState">学校列表</h1>
+        </div>
+        <a href="javascript:void(0);" class="opt next">
+          <label for="submit" ng-if="'editPwd' | isState">
+            <button id="submit" ng-disabled="pwd_form.$invalid" ng-click="savePwd()">完成</button>
+          </label>
+          <label for="submitOrg" ng-if="'orgList' | isState">
+            <button id="submitOrg" ng-click="setOrg()">完成</button>
+          </label>
+        </a>
+      </header>
+      <section class='personal-container' ui-view></section>
+    </form>
+    <yoya-dialog dialog="ctrl.dialog"></yoya-dialog>
+    <yoya-aside aside="ctrl.aside"></yoya-aside>
+    <div ng-click="hideAside()" class="asideMask"></div>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+
+.activities-wrapper{
+  position:absolute;
+  top:rem(80);
+  left:0;
+  width:100%;
+  bottom:0;
+  overflow-scroll();
+}
+.activities-item {
+  border-bottom: 1px solid #DBDBDB;
+  background:#FFF;
+  li {
+    background: #FFF;
+    border-bottom: 1px solid #dbdbdb;
+    list-style: none;
+    margin: rem(20) 0 rem(10) rem(20);
+    &:last-child {
+      border: none;
+    }
+    .content {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: rem(32);
+      color: #333;
+      padding: 0 rem(20) rem(10) 0;
+      .status {
+        height: rem(36);
+        width: rem(94);
+        font-size: rem(24);
+        color: #fff;
+        text-align: center;
+        padding: 0 rem(6);
+        vertical-align: middle;
+        position: relative;
+        .iconfont {
+          color: #ffb301;
+          position: absolute;
+          width: rem(94);
+          height: rem(34);
+          left: 0;
+          top: 0;
+          z-index: 0;
+          line-height: rem(34);
+          font-size: rem(36);
+        }
+        .txt {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: rem(88);
+          height: rem(34);
+          line-height: rem(34);
+          font-size: rem(22);
+          text-align: left;
+          padding-left: rem(8);
+        }
+      }
+    }
+    .desc {
+      overflow: hidden;
+      line-height: rem(84);
+      height: rem(84);
+      padding: 0 rem(20) rem(10) 0;
+      .endTime {
+        float: right;
+        color: #939393;
+        font-size: rem(22);
+        vertical-align: middle;
+        .icon-time-empty {
+          font-size: rem(25);
+          margin-right rem(6);
+          color: #44a1f0;
+        }
+      }
+    }
+    .avatar,
+    .name {
+      display: inline-block;
+      vertical-align: middle;
+      color: #707070;
+    }
+    .avatar {
+      border-radius: 50%;
+      width: rem(50);
+      height: rem(50);
+      margin-right: rem(10)
+    }
+    .author {
+      float: left;
+      font-size: rem(28);
+      color: #a0a0a0;
+    }
+  }
+}

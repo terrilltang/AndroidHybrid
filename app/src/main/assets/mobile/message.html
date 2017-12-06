@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>我的消息</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="./assets/js/lib/angular.min.js"></script>
+    <script src="./assets/js/lib/angular-ui-router.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/pages/message.js"></script>
+</head>
+
+<body ng-app="ngAppMessage" ng-cloak>
+    <main ng-controller="messagesCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="no-footer">
+        <header>
+            <a href="javascript:void(0);" class="opt prev" ng-click='showAside()' ng-if="'index' | isState">
+                <i class="iconfont icon-menu"></i>
+            </a>
+            <a href="javascript:history.back(-1);" class="opt prev" ng-if="!('index' | isState)">
+                <i class="iconfont icon-arrow-left"></i>
+            </a>
+            <div class="title">
+                {{$state}}
+                <h1 ng-if="'index' | isState">消息</h1>
+                <h1 ng-if="'comment' | isState">评论</h1>
+                <h1 ng-if="'like' | isState">赞</h1>
+                <h1 ng-if="'notice' | isState">通知</h1>
+            </div>
+        </header>
+        <section data-ui-view class="message-container">
+        </section>
+        <yoya-aside aside="ctrl.aside"></yoya-aside>
+        <div ng-click="hideAside()" class="asideMask"></div>
+    </main>
+
+</body>
+
+</html>

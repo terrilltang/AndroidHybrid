@@ -1,0 +1,13 @@
+<div class="set-block">
+  <a ui-sref="profile" class="block">
+    <span class="name">个人信息</span>
+    <span class="arrow iconfont icon-enter"></span>
+  </a>
+  <a ui-sref="editPwd" class="block" ng-if="!isApp">
+    <span class="name">修改密码</span>
+    <span class="arrow iconfont icon-enter"></span>
+  </a>
+</div>
+<label for="logout" class="btn" ng-if="!isApp">
+  <button id="logout" ng-click="logout()">退出登录</button>
+</label>

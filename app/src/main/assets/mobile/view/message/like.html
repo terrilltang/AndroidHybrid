@@ -1,0 +1,25 @@
+<div class="message-list" ng-if="!emptyDigs">
+    <div class="item" ng-repeat="dig in digs track by $index" ng-click="viewWork(dig)">
+        <div class="avatar">
+            <img src="assets/images/avatar/avatar-1.png" ng-if="!dig.head_url">
+            <img ng-src="{{dig.head_url}}" fail-back-url="avatar/avatar-1.png" ng-if="dig.head_url">
+        </div>
+        <div class="desc">
+            <div class="line-1">
+                <span class="name">{{dig.user_name}}</span>
+                <span class="from">赞了
+                    <span>《{{dig.work_name}}》</span>
+                </span>
+            </div>
+            <div class="line-2">
+                <span class="time">{{dig.like_time | yoyaDate:'YYYY/MM/DD hh:mm:ss'}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<a ng-if="hasMoreDigs" ng-click="getDigs()" class="load-more">点击加载更多</a>
+<a ng-if="!hasMoreDigs && digsCount" class="load-more">已没有更多</a>
+<div class="empty-msg" ng-if="emptyDigs">
+    <img src="assets/images/empty/02.png">
+    <p>还没有人为你点赞</p>
+</div>

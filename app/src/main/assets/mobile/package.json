@@ -1,0 +1,19 @@
+{
+  "name": "orgmobile",
+  "version": "1.0.0",
+  "description": "yoya Org Mobile with angularjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp"
+  },
+  "private": true,
+  "author": "TANG",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-stylus": "^2.6.0",
+    "nib": "^1.1.2"
+  }
+}

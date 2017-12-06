@@ -1,0 +1,18 @@
+<div ng-class="{'enter':$ctrl.dialog.show,'out':!$ctrl.dialog.show}" class="popup dialog" ng-if='$ctrl.dialog.show'>
+    <s ng-click="$ctrl.dialog.closeFun()"></s>
+    <div class="popup-wrap">
+        <div class="popup-content">
+            <s></s><span class="title">{{$ctrl.dialog.title}}</span>
+            <p class="des">{{$ctrl.dialog.des}}</p>
+            <div class="dialog-btn">
+                <label for="btn1" ng-if="$ctrl.dialog.btn1.txt">
+                    <button id="btn1" ng-click="$ctrl.dialog.btn1.fun()">{{$ctrl.dialog.btn1.txt}}</button>
+                </label>
+                <label for="btn2" ng-if="$ctrl.dialog.btn2.txt">
+                    <button id="btn2" ng-click="$ctrl.dialog.btn2.fun()">{{$ctrl.dialog.btn2.txt}}</button>
+                </label>
+            </div>
+            <span ng-if="$ctrl.dialog.closeBtn" ng-click="$ctrl.dialog.closeFun()" class="closeBtn"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="profile-block">
+  <div ng-repeat="org in orgs track by $index" class="block" ng-click='chooseOrg($index)'>
+    <span class="name">{{org.org_name}}</span>
+    <span ng-if="org.is_default_org=='1'" class="status">
+      <i class="iconfont icon-choose"></i>
+    </span>
+  </div>
+</div>

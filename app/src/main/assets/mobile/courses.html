@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>我的课程</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/courses.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="coursesCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="no-footer">
+    <header>
+      <a href="javascript:void(0);" class="opt prev" ng-click='showAside()'>
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <div class="title">
+        <h1>我的课程</h1>
+      </div>
+    </header>
+
+    <section class="disable-scroll">
+      <div class="tabs">
+        <a href="javascript:void(0)" ng-class="{'curr':tabs.micro}" ng-click="getMicro()">
+          <span>微课</span>
+        </a>
+        <a href="javascript:void(0)" ng-class="{'curr':tabs.step}" ng-click="getSteps()">
+          <span>课程</span>
+        </a>
+      </div>
+      <div class="courses-list-wrapper">
+        <div class="courses-list" ng-if="tabs.micro">
+          <div ng-click="getContents(course)" class="list-item" ng-repeat="course in courses track by $index">
+            <div class="cover img">
+              <img src="assets/images/ex-micro-course.jpg">
+            </div>
+            <div class="desc">
+              <div class="title">{{course.album_name}}</div>
+              <div class="authorDetail">
+                <img ng-if="course.full_head_url" ng-src="{{course.full_head_url}}" class="avatarImg" fail-back-url="avatar-null.png">
+                <img ng-if="!course.full_head_url" src="assets/images/avatar-null.png" class="avatarImg">
+                <span>{{course.name}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="courses-list" ng-if="tabs.step">
+          <div ng-click="getCourseDetail(course)" class="list-item" ng-repeat="course in stepCourses track by $index">
+            <div class="cover">
+              <img ng-src="{{course.course_cover}}" ng-if="course.course_cover">
+              <img src="assets/images/ex-course.jpg" ng-if="!course.course_cover">
+            </div>
+            <div class="desc">
+              <div class="title">{{course.course_name}}</div>
+              <div class="authorDetail">
+                <img ng-if="course.head_url" ng-src="{{course.head_url}}" class="avatarImg" fail-back-url="avatar-null.png">
+                <img ng-if="!course.head_url" src="assets/images/avatar-null.png" class="avatarImg">
+                <span>{{course.name}}</span>
+              </div>
+              <div class="progress" ng-if="course.learnPercent!='100%' && course.learnPercent!='0'">
+                <span class="iconfont icon-time-empty"></span>
+                <span>已学习{{course.learnPercent}}</span>
+              </div>
+              <div class="progress unlearn" ng-if="course.learnPercent=='0'">
+                <span>还未开始学习</span>
+              </div>
+
+              <div class="progress complete" ng-if="course.learnPercent=='100%'">
+                <span class="iconfont icon-complete"></span>
+                <span>已学完</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="javascript:void(0);" ng-if="hasMore && tabs.micro" ng-click="getCourses()" class="load-more">点击加载更多</a>
+        <div ng-if="emptyList && tabs.micro" class="empty-msg">
+          <img src="assets/images/empty/01.png">
+          <p>您目前没有创新微课程哦!</p>
+        </div>
+
+        <a href="javascript:void(0);" ng-if="hasMoreSteps && tabs.step" ng-click="getStepCourses()" class="load-more">点击加载更多</a>
+        <div ng-if="emptyStepList && tabs.step" class="empty-msg">
+          <img src="assets/images/empty/01.png">
+          <p>您目前没有进阶课程哦!</p>
+        </div>
+      </div>
+    </section>
+    <yoya-aside aside="ctrl.aside"></yoya-aside>
+    <div ng-click="hideAside()" class="asideMask"></div>
+  </main>
+</body>
+
+</html>

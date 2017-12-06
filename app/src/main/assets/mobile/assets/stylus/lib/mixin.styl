@@ -1,0 +1,19 @@
+rem(arg) {
+  return floor(arg / 75 * 1rem, 4);
+}
+
+circle-img(size) {
+  width: size;
+  height: size;
+  border-radius: 50%;
+  img {
+    width: size;
+    height: size;
+    border-radius: 50%;
+  }
+}
+
+overflow-scroll(){
+  overflow-y:auto;
+  -webkit-overflow-scrolling: touch;
+}

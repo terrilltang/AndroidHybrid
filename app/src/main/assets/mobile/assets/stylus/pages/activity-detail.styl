@@ -1,0 +1,329 @@
+
+.activity-detail-container {
+  .activity-contain {
+    font-size: rem(32);
+    background: #FFF;
+    box-sizing: border-box;
+    padding: rem(24) rem(20) rem(10) rem(20);
+    border-bottom: 1px solid #DBDBDB;
+    position:relative;
+    .endFlag{
+      position:absolute;
+      bottom:0;
+      right:rem(10);
+      width:rem(210);
+      height:rem(130);
+      z-index:99;
+      img{
+        width:100%;
+      }
+    }
+    .title {
+      height: rem(40);
+      position: relative;
+      line-height: rem(40);
+      .text {
+        position: absolute;
+        left:0;
+        right: rem(20);
+        height: rem(40);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .iconfont {
+        color: #69b3f3;
+      }
+    }
+
+    .time {
+      color:#939393;
+      font-size: rem(24);
+      line-height: rem(50);
+      vertical-align:middle;
+      .icon-time-empty{
+        margin-right: rem(8);
+        font-size:rem(24);
+        color: #11b6f2;
+      }
+    }
+    .des {
+      padding: rem(12) 0 rem(20) 0;
+      font-size: rem(28);
+      color: #474747;
+      line-height: 1.4;
+      text-indent:rem(56);
+
+    }
+    .att {
+      border-top: 1px solid #EEE;
+      line-height: rem(50);
+      font-size: rem(26);
+      padding: rem(10) 0;
+      color: #666;
+      position:relative
+      a{
+        color:#666;
+      }
+      .iconfont {
+        font-size:rem(34);
+        color: #69b3f3;
+        &.icon-enter{
+          position:absolute;
+          right:rem(10);
+          top:50%;
+          transform:translateY(-50%)
+          color:#939393
+        }
+      }
+    }
+  }
+ 
+  .tabs-content{
+    position:static;
+    margin:rem(10) auto;
+    min-height:rem(480);
+    background:#FFF;
+    .works {
+      background: #FFF;
+      font-size: rem(26);
+      color: #666;
+      padding: 0 rem(20);
+      .title {
+        line-height: rem(60);
+        border-bottom: 1px solid #EEE;
+      }
+      .time {
+        line-height: rem(70);
+        padding-bottom:rem(10);
+        color: #707070;
+        border-bottom: 1px solid #EEE;
+        font-size:rem(28);
+        span{
+          line-height:rem(70);
+        }
+        .icon-select{
+          color:#ffb301;
+          font-size:rem(34);
+          margin-right: rem(10);
+        }
+      }
+      .des {
+        padding: rem(10) 0;
+        p {
+          padding: rem(15) 0;
+          color:#707070;
+          font-size:rem(28);
+          text-indent:rem(56);
+          line-height: rem(34);
+        }
+        label {
+          display: block;
+          padding-top:rem(10);
+          textarea {
+            border:1px solid #DBDBDB;
+            border-radius:rem(5);
+            height: rem(210);
+            line-height: rem(30);
+            width: 100%;
+            box-sizing: border-box;
+            padding:rem(8);
+            font-size: rem(28);
+            color: #666;
+            background:#f7f9fc;
+            &::-webkit-input-placeholder{
+              color:#BCBCBC
+            }
+          }
+        }
+        .count{
+          font-size:rem(22);
+          line-height:rem(60);
+          color:#999;
+        }
+      }
+      .attachment {
+        position: relative;
+        label {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          display: block;
+          width: rem(60);
+          height: rem(60);
+          color:#707070
+          .iconfont {
+            width: rem(58);
+            height: rem(58);
+            line-height: rem(60);
+            color: #11b6f2;
+            font-size: rem(50);
+            text-align: center;
+          }
+          input {
+            opacity: 0;
+          }
+        }
+        .att {
+          box-sizing:border-box;
+          height:rem(60);
+          border-top:1px solid #EEE;
+          > div {
+            display: block;
+            height: rem(88);
+            border-bottom: 1px solid #EEE;
+            line-height: rem(88);
+            font-size: rem(26);
+            color: #707070;
+            position:relative;
+            .iconfont {
+              color: #11b6f2;
+              font-size: rem(38);
+              position:absolute;
+              left:0;
+              top:0;
+            }
+            .file{
+              width:100%;
+              display:block;
+              box-sizing:border-box;
+              padding:0 rem(80) 0 rem(40);
+              text-overflow:ellipsis;
+              overflow:hidden;
+              white-space:nowrap;
+            }
+            .icon{
+              display:block;
+              height:rem(88);
+              width:rem(64);
+              position:absolute;
+              right:0;
+              top:0;
+              i{
+                display:block;
+                height:rem(88);
+                width:rem(64);
+                text-align:center;
+                color:#8a8a8a;
+              }
+            }
+
+          }
+        }
+      }
+    }
+
+    .made-work{
+      a{
+        display:block;
+        height:rem(80);
+        line-height:rem(80);
+        width:70%;
+        box-sizing:border-box;
+        border-radius:rem(8);
+        border:2px solid #54a8f0;
+        text-align:center;
+        color:#54a8f0;
+        background:#FFF;
+        font-size:rem(30);
+        margin:rem(40) auto;
+      }
+    }
+  }
+
+}
+
+
+.upload-dialog{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  opacity:0;
+  z-index:999;
+  s{
+    display:block;
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+  }
+  .dialog-btns{
+    position:absolute;
+    z-index:2;
+    left:0;
+    bottom:rem(-310);
+    width:100%;
+    background:#DBDBDB;
+    .dialog-btn{
+      background:#FFF;
+      margin-bottom:rem(10);
+      color:#333;
+      &:last-child{
+        margin-bottom:0;
+      }
+      label{
+        display:block;
+        height:rem(98);
+        border-bottom:1px solid #DBDBDB;
+        font-size:rem(34);
+        position:relative;
+        &:last-child{
+          border:none;
+        }
+        button,input{
+          display:block;
+          width:100%;
+          height:100%;
+          position:absolute;
+          top:0;
+          color:#333;
+          border:none;
+          background:none;
+          font-size:rem(34);
+          font-family:"Microsoft YaHei", Helvetica, Arial, sans-serif;
+        }
+        .button{
+          height:100%;
+          text-align:center;
+          width:100%;
+          line-height:rem(98);
+        }
+        input[type=file]{
+          visibility:hidden;
+        }
+      }
+    }
+
+  }
+  &.enter{
+    opacity:1
+    transition:opacity 0.2s ease;
+    .dialog-btns{
+      bottom:0;
+      transition:bottom 0.2s ease;
+    }
+  }
+  &.out{
+    opacity:0
+    transition:opacity 0.2s ease;
+    .dialog-btns{
+      bottom:rem(-310);
+      transition:bottom 0.2s ease;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

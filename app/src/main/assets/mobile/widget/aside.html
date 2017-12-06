@@ -1,0 +1,48 @@
+<aside>
+    <div class="user">
+        <a class="avatar" href="./personal.html" target="_parent">
+            <img ng-if="$ctrl.aside.src" ng-src="{{$ctrl.aside.src}}" fail-back-url="avatar/avatar-1.png">
+            <img ng-if="!$ctrl.aside.src" src="./assets/images/avatar/avatar-1.png">
+        </a>
+        <div class="desc">
+            <p class="name">{{$ctrl.aside.name}}</p>
+            <p class="org">{{$ctrl.aside.org}}</p>
+        </div>
+
+    </div>
+    <div class="menu">
+        <a ng-href="./dynamics.html">
+
+            <i class="iconfont icon-dynamic"></i>
+
+            <span class="text">学习动态</span>
+        </a>
+        <a ng-href="./tasks.html">
+
+            <i class="iconfont icon-question"></i>
+
+            <span class="text">学习难点</span>
+        </a>
+        <a href="./courses.html">
+            <i class="iconfont icon-courses"></i>
+            <span class="text">我的课程</span>
+        </a>
+        <a href="./activities.html">
+            <i class="iconfont icon-activity"></i>
+            <span class="text">我的活动</span>
+        </a>
+        <!-- <a href="../h5/index.html?org_id={{$ctrl.aside.orgId}}">
+            <i class="iconfont icon-school"></i>
+            <span class="text">我的校园</span>
+        </a> -->
+        <a href="./message.html" target="_parent">
+            <i class="iconfont icon-message"></i>
+            <span class="text">我的消息</span>
+        </a>
+
+        <a href="./personal.html" target="_parent">
+            <i class="iconfont icon-setting"></i>
+            <span class="text">设置</span>
+        </a>
+    </div>
+</aside>

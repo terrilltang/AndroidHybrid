@@ -1,0 +1,117 @@
+.courses-list-wrapper {
+  position: absolute;
+  top: rem(80);
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow-scroll();
+}
+
+.courses-list {
+  padding: 0 0 0 rem(20);
+  background: #FFF;
+
+  .list-item {
+    background: #fff;
+    list-style: none;
+    padding: rem(30) 0;
+    border-bottom: 1px solid #DBDBDB;
+
+    &:active {
+      opacity: 0.9;
+    }
+
+    .cover {
+      display: inline-block;
+      vertical-align: middle;
+      width: rem(320);
+      height: rem(180);
+      border-radius: rem(5);
+      position: relative;
+      overflow: hidden;
+
+      .icon, img {
+        position: absolute;
+        left: 50%;
+        font-size: rem(70);
+        color: #fff;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .desc {
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      box-sizing: border-box;
+      width: rem(380);
+      padding-left: rem(10);
+
+      .title {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: rem(32);
+        line-height: rem(40);
+        color: #333;
+      }
+
+      .authorDetail {
+        color: #a0a0a0;
+        padding-top: rem(20);
+        overflow: hidden;
+        font-size: rem(28);
+
+        span {
+          width: rem(190);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-left: rem(10);
+        }
+
+        img, span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+
+        .avatarImg {
+          width: rem(50);
+          height: rem(50);
+          border-radius: 50%;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+
+      .progress {
+        height: rem(50);
+        padding-top: rem(20);
+        font-size: rem(22);
+        box-sizing: border-box;
+        line-height: rem(30);
+        margin: 0;
+        color: #11b6f2;
+
+        .iconfont {
+          font-size: rem(24);
+          line-height: rem(30);
+        }
+
+        &.complete {
+          color: #ffb301;
+        }
+
+        &.unlearn {
+          color: #999;
+        }
+      }
+    }
+  }
+}

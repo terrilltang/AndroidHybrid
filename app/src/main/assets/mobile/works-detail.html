@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>机构门户</title>
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="./assets/js/app.js"></script>
+  <script src="./assets/js/pages/works-detail.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="worksDetailCtrl as ctrl" class="no-footer">
+    <header>
+      <a href="javascript:history.back()" class="opt prev">
+        <i class="iconfont icon-arrow-left"></i>
+      </a>
+      <!-- <a href="javascript:history.back()" class="iconfont icon-return back" ng-if="!viewAttPage"></a>
+      <a href="javascript:void(0);" class="iconfont icon-return back" ng-if="viewAttPage" ng-click="closeViewAtt()"></a> -->
+      <div class="title">
+        <h1>{{movie.NAME}}</h1>
+      </div>
+    </header >
+    <section class="works-container">
+      <div class="play-contain">
+        <div class="content" ng-if="playPermission=='1' || (playPermission=='2' && userId) || (!movie.hddyUrl && playPermission=='3' && login_user_id) || (movie.hddyUrl && playPermission=='3' && userId)">
+          <iframe ng-src="{{playObj.url}}" ng-if="playObj.type=='movie'"></iframe>
+          <img ng-src="{{playurl.url}}" ng-if="playObj && playObj.type!='movie' && $index<7" ng-repeat="playurl in playObj track by $index"
+            class='multi'>
+          <video ng-src="{{movUrl}}" poster="{{iconUrl}}" controls="" ng-if="isMovie && resType && resType!='movie' && !showDefault"></video>
+
+          <div ng-if="isFile && !showDefault" class="file-container">
+            <div ng-if="resType=='folder'" class="file-type folder"></div>
+            <div ng-if="isImg" ng-class="resType" class="file-type"></div>
+            <div ng-if="resType=='ppt'||resType=='pptx'" class="file-type ppt"><i class="iconfont icon-ppt"></i>
+            </div>
+            <div ng-if="resType=='doc'||resType=='docx'" class="file-type word"><i class="iconfont icon-word"></i>
+            </div>
+            <div ng-if="resType=='xls'||resType=='xlsx'" class="file-type excel"><i class="iconfont icon-excel"></i>
+            </div>
+            <div ng-if="resType=='pdf'" class="file-type pdf"><i class="iconfont icon-pdf"></i></div>
+            <div class="file-des">
+              <div class="title">{{movie.COURSE_NAME}}</div>
+              <a href="#" ng-click="startDownload()" ng-if="!hideDownload" class="download">查看文件</a>
+              <span ng-if="hideDownload" class="download disabled">暂不提供下载</span>
+            </div>
+            <div ng-if="showDefault" class="default-container">
+              <img ng-if="!isImg" src="assets/images/ex-movie.png">
+              <img ng-if="isImg" src="assets/images/ex-img.png">
+            </div>
+          </div>
+        </div>
+        <div class="content" ng-if="(playPermission=='2' && !userId) || (!movie.hddyUrl && playPermission=='3' && !login_user_id) || (movie.hddyUrl && playPermission=='3' && !userId)">
+          <div class="empty">
+            <img src="assets/images/work-empty-bg.jpg">
+            <div class="text">
+              <img src="assets/images/app-work-empty.png">
+              <p>亲，您没有播放影片的权限！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="play-author">
+        <div class="author-info">
+          <div class="avatar">
+            <img ng-src="{{movie.dir_img_path}}" ng-if="movie.dir_img_path" fail-back-url="avatar-null.png">
+            <img src="./assets/images/avatar-null.png" ng-if="!movie.dir_img_path">
+          </div>
+          <div class="info"><span class="name">{{movie.USER_NAME || movie.user_name}}</span><span class="time">{{movie.PUB_DATE | yoyaDate : "YYYY.MM.DD" }}{{movie.pub_date | yoyaDate : "YYYY.MM.DD"}}</span>
+          </div>
+        </div>
+        <div class="dig had" ng-if="isHave" ng-click="add_like()"><span class="iconfont icon-heartfull"></span><span class="txt">已赞</span></div>
+        <div class="dig" ng-if="!isHave" ng-click="add_like()"><span class="iconfont icon-heart"></span><span class="txt">赞</span>
+        </div>
+      </div>
+      <div class="reviews">
+        <div class="title">评论<span ng-if="commentCount">({{commentCount}})</span></div>
+        <div class="reviews-list">
+          <div class="list-item" ng-repeat="comment in comments track by $index" ng-if="comments.length &gt 0">
+            <div class="item-author">
+              <div class="avatar">
+                <img ng-src="{{comment.head_url}}" fail-back-url="avatar-null.png" ng-if="comment.head_url">
+                <img src="./assets/images/avatar-null.png" ng-if="!comment.head_url">
+              </div>
+              <div class="info"><span class="name">{{comment.user_name}}</span><span class="time">{{comment.comment_time | yoyaDate : "YYYY/MM/DD hh:mm"}}</span>
+              </div>
+            </div>
+            <div class="item-content">
+              <p>{{comment.comment_content}}</p>
+            </div>
+          </div>
+          <div class="load-more" ng-if="hasMorecomments" ng-click="getCommentList()">查看更多</div>
+          <div ng-if='!comments.length' class="emptyMsg"><img src="assets/images/empty/02.png">
+            <p>还没有评论哦！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <footer class="footer">
+      <form name="reviewsForm" novalidate>
+        <label for="write" class="write">
+        <input id="write" placeholder="写下你想说的" ng-model="reviewForm.content">
+      </label>
+        <label for="submit" class="submit" ng-click="addComment()">
+        <button id="submit">发送</button>
+      </label>
+      </form>
+    </footer>
+
+  </main>
+</body>
+
+</html>

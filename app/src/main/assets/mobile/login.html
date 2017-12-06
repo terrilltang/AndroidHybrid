@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>登录</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="./assets/js/app.js"></script>
+  <script src="./assets/js/pages/login.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="loginCtrl as ctrl" class="no-footer">
+    <header>
+      <div class="title">
+        <h1>优学</h1>
+      </div>
+    </header>
+    <section class="login-container">
+      <div class="login-wrapper">
+        <label class="name">
+          <input id="name" type="text" placeholder="账号" ng-model="loginForm.user" required>
+          <span ng-if='loginForm.user' ng-click="clearUser()" class="icon iconfont icon-del"></span>
+        </label>
+        <label class="pwd">
+          <input id="pwd" type="{{pwdInputType}}" placeholder="请输入密码" ng-model="loginForm.pwd" required>
+          <span ng-if='loginForm.pwd' ng-class="{'on':pwdInputType=='text'}" ng-click="togglePwd()" class="icon iconfont icon-eye"></span>
+        </label>
+        <label for="submit" class="submit">
+          <button id="submit" ng-click="loginManual()" accesskey="j">登录</button>
+        </label>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

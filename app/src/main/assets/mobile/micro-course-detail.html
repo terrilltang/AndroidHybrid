@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>微课详情</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/micro-course-detail.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="microCourseDetailCtrl as ctrl" ng-class="{'asideView': asideView,'no-footer':!tabs.review }">
+    <form name="feedback_form" novalidate>
+      <header>
+        <a href="javascript:void(0);" class="opt prev" ng-if="editFeedback" ng-click="closeFeedBack()">
+          <i class="iconfont icon-arrow-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="opt prev" ng-click="clickBack()" ng-if="!editFeedback">
+          <i class="iconfont icon-arrow-left"></i>
+        </a>
+        <a href="javascript:void(0);" class="opt next">
+          <label for="submit" ng-if="editFeedback && tabs.feedback">
+            <button id="submit" ng-disabled="feedback_form.$invalid" ng-click="submitFeedback()">保存</button>
+          </label>
+        </a>
+        <div class="title">
+          <h1 ng-if="!editFeedback">{{content.course.COURSE_NAME}}</h1>
+          <h1 ng-if="editFeedback">学习反馈</h1>
+        </div>
+      </header>
+      
+      <section class="disable-scroll">
+
+        <div class="course-content-detail" ng-if='!playUrl'>
+          <div class="cover">
+            <div class="cover-img">
+              <img ng-src='{{content.course.icon_url}}'>
+            </div>
+            <div class="cover-icon">
+              <i class="iconfont icon-img" ng-if='resType=="jpg" || resType=="jpeg" || resType=="gif" || resType=="png"'></i>
+              <i class="iconfont icon-ppt" ng-if='resType=="ppt" || resType=="pptx"'></i>
+              <i class="iconfont icon-word" ng-if='resType=="doc" || resType=="docx"'></i>
+              <i class="iconfont icon-excel" ng-if='resType=="xls" || resType=="xlsx"'></i>
+              <i class="iconfont icon-pdf" ng-if='resType=="pdf"'></i>
+              <i class="iconfont icon-video" ng-if='resType=="mp4" || resType=="wmv" || resType=="avi"'></i>
+              <i class="iconfont icon-audio" ng-if='resType=="mp3"'></i>
+              <i class="iconfont icon-movie" ng-if='resType=="movie"'></i>
+            </div>
+          </div>
+          <div class="title">
+            {{content.course.COURSE_NAME}}
+          </div>
+          <div class="opt">
+            <a href="javascript:void(0);" ng-click='viewDetail()'>
+              <i class="iconfont icon-play"></i>
+              <span>查看/播放</span>
+            </a>
+          </div>
+        </div>
+        <div class="course-content-play" ng-if='playUrl'>
+          <video src='' controls id='video' video-src='{{playUrl}}' video-poster='{{content.course.icon_url}}'></video>
+        </div>
+
+
+
+
+        <div class="tabs">
+          <a href="javascript:void(0);" ng-class="{'curr':tabs.feedback}" ng-click="viewSubmitFeedback()">
+            <span>反馈</span>
+          </a>
+          <a href="javascript:void(0);" ng-class="{'curr':tabs.review}" ng-click="viewWriteReview()">
+            <span ng-if="reviewsCount">评论({{reviewsCount}})</span>
+            <span ng-if="!reviewsCount">评论</span>
+          </a>
+        </div>
+        <div class="tabs-content" ng-if="tabs.review">
+          <div class="reviews">
+            <div class="reviews-list">
+              <div class="list-item" ng-repeat="review in reviews track by $index" ng-if="reviewsCount">
+                <div class="item-author">
+                  <div class="avatar">
+                    <img src="./assets/images/avatar-null.png" ng-if="!review.head_url">
+                    <img ng-src="{{review.head_url}}" ng-if="review.head_url">
+                  </div>
+                  <div class="info">
+                    <span class="name">{{review.user_name}}</span>
+                    <span class="time">{{review.comment_time | yoyaDate:'YYYY/MM/DD hh:mm:ss' }}</span>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <p>{{review.comment_content}}</p>
+                </div>
+              </div>
+              <div class="load-more" ng-if="hasMoreViews && reviewsCount" ng-click="getReviews()">查看更多</div>
+              <div class="load-more" ng-if="!hasMoreViews && reviewsCount">已没有更多</div>
+
+              <div ng-if='!reviewsCount' class="empty-msg">
+                <img src="assets/images/empty/02.png">
+                <p>还没有新评论</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="tabs-content" ng-if="tabs.feedback">
+          <!--显示学习反馈-->
+          <div class="showFeedback" ng-if="!editFeedback">
+            <img src="./assets/images/empty/04.png" ng-if="!feedBackId" class="feedback-empty">
+            <button ng-click="modifyFeedBack()" ng-if="!feedBackId" class="feedback">完成学习</button>
+            <div ng-if="feedBackId" class="feedback-content">
+              <div class="content-title">
+                <!--<span class="time">{{content.feedBack.FEEDBACK_TIME | yoyaDate:'YYYY/MM/DD hh:mm:ss'}}</span>-->
+                <span class="level">
+                  <span class="iconfont icon-light"></span>
+                  <span class="des">学习难度:</span>
+                  <span ng-class="{'difficult':content.feedBack.FEEDBACK_DIFFICULTY=='03','normal':content.feedBack.FEEDBACK_DIFFICULTY=='02','simple':content.feedBack.FEEDBACK_DIFFICULTY=='01'}">{{diffName}}</span>
+                </span>
+                <a href="javascript:void(0);" ng-click="modifyFeedBack()" class="edit iconfont icon-edit"></a>
+              </div>
+              <div class="feedback-content-title">
+                <span class="iconfont icon-detail"></span>
+                <span class="txt">反馈信息</span>
+              </div>
+              <div class="content-block">
+                <div ng-if="content.feedBack.FEEDBACK_CONTENT" class="content">
+                  {{content.feedBack.FEEDBACK_CONTENT}}
+                </div>
+                <div ng-if="!content.feedBack.FEEDBACK_CONTENT" class="content">你还没有填写反馈内容</div>
+              </div>
+
+            </div>
+          </div>
+          <!--编辑学习反馈-->
+          <div ng-if="editFeedback" class="editFeedback">
+            <div class="feedback-container">
+              <div class="choose-option">
+                <span ng-repeat="option in level track by $index" ng-class="{'simple':$index==0,'normal':$index==1,'difficult':$index==2,'curr':($index+1)==currDiff || ($index+1) == feedbackForm.dif }"
+                  ng-click="chooseDiff($index)">{{option.TXT}}</span>
+              </div>
+              <div class="feedback-content-wrap">
+                <label for="feedbackContent">
+                  <textarea id="feedbackContent" name="feedback_content" placeholder="请输入你对课程的反馈" ng-model="feedbackForm.con" ng-change="checkCharsets()"
+                    ng-focus="topFeedback()"></textarea>
+                </label>
+                <span class="count">还可以输入:{{140-feedbackForm.con.length}}个字</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </form>
+    <footer ng-if="tabs.review" ng-if='!viewAttPage'>
+      <form name="reviewsForm" novalidate>
+        <label for="write" class="write">
+          <input id="write" placeholder="写下你想说的" ng-model="reviewForm.content">
+        </label>
+        <label for="submitReview" class="submit" ng-click="addReview()">
+          <button id="submitReview">发送</button>
+        </label>
+      </form>
+    </footer>
+
+    <!-- <div class="scaleOpt" ng-if="viewAttPage && resType!='ppt' && resType!='pptx'">
+      <span ng-click="zoomIn()">
+        <i class="iconfont icon-zoomin"></i>
+      </span>
+      <span ng-click="zoomOut()">
+        <i class="iconfont icon-zoomout"></i>
+      </span>
+    </div> -->
+
+  </main>
+</body>
+
+</html>

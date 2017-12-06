@@ -1,0 +1,13 @@
+<div class="message-list" ng-if="!emptyNotice">
+    <div class="item" ng-repeat="n in notices track by $index">
+        <p class="content">{{n.notice_content}}</p>
+        <p class="time">{{n.notice_time | yoyaDate:'YYYY/MM/DD hh:mm:ss'}}</p>
+    </div>
+
+    <a ng-if="hasMoreNotices" ng-click="getNotices()" class="load-more">点击加载更多</a>
+    <a ng-if="!hasMoreNotices && noticesCount" class="load-more">已没有更多</a>
+</div>
+<div class="empty-msg" ng-if="emptyNotice">
+    <img src="assets/images/empty/02.png">
+    <p>暂时没有通知</p>
+</div>

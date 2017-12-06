@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>学习动态</title>
+
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/dynamics.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="dynamicsCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="no-footer">
+    <header>
+      <a href="javascript:void(0);" class="opt prev" ng-click="showAside()">
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <!-- <a href="#" class="opt next">
+        <i class="iconfont icon-search"></i>
+      </a> -->
+      <div class="title">
+        <h1>学习动态</h1>
+      </div>
+    </header>
+
+    <section class="dynamics-container">
+      <div class="dynamics-wrapper">
+        <ul class="dynamics">
+          <li ng-repeat="ac in activities track by $index" ng-click="getDetail(ac)" ng-if="ac.news_obj_id" class="dynamic">
+            <div ng-if="activities[$index].publish_time.substr(0,8)!=activities[$index-1].publish_time.substr(0,8)" class="time-filter">
+              {{ac.publish_time | yoyaDate:'YYYY年MM月DD日 星期W'}}
+            </div>
+            <div class="dynamic-item">
+              <div class="dynamic-status" ng-if="ac.news_type=='02'">
+                <span ng-if="ac.news_status=='01' &&  ac.obj_end_time.substr(0,8)>today" class="pending">
+                  待完成
+                </span>
+                <span ng-if="ac.news_status=='02'" class="finshed">
+                  已完成
+                </span>
+                <span ng-if="ac.news_status=='01' && (ac.obj_end_time.substr(0,8)<today)" class="expire">
+                  已过期
+                </span>
+              </div>
+              <div class="author-detail">
+                <div class="avatar-img">
+                  <img src="assets/images/avatar/avatar-1.png" ng-if="!ac.publishUserIcon">
+                  <img ng-src="{{ac.publishUserIcon}}" fail-back-url="avatar/avatar-1.png" ng-if="ac.publishUserIcon">
+                </div>
+                <div class="author">
+                  <span>{{ac.publishUserName}}</span>
+                </div>
+                <div class="time">
+                  <span>{{ac.publish_time | yoyaDate:'YYYY/MM/DD':true}}</span>
+                  <span ng-if="ac.news_type=='02'&& ac.obj_end_time">
+                    至{{ac.obj_end_time | yoyaDate:'YYYY/MM/DD'}}
+                  </span>
+                </div>
+              </div>
+              <div class="dynamic-card">
+                <div class="title">
+                  <span ng-if="ac.news_type=='03'" class="type course">
+                    课程
+                  </span>
+                  <span ng-if="ac.news_type=='02'" class="type activity">
+                    活动
+                  </span>
+                  <span ng-if="ac.news_type=='01'" class="type micro-course">
+                    微课
+                  </span>
+                  <span>{{ac.news_title}}</span>
+                </div>
+
+                <div ng-if="ac.news_type=='02'" class="content">{{ac.news_content}}</div>
+              </div>
+              <div class="dynamic-cover" ng-if="ac.res_type">
+                <div class="cover" ng-class="{'micro-course':ac.news_type=='01'}">
+                  <div class="cover-img">
+                    <img ng-src='{{ac.res_path | removeAMP}}'>
+                  </div>
+                  <div class="cover-icon">
+                    <i class="iconfont icon-img" ng-if='ac.res_type=="jpg" || ac.res_type=="jpeg" || ac.res_type=="gif" || ac.res_type=="png"'></i>
+                    <i class="iconfont icon-ppt" ng-if='ac.res_type=="ppt" || ac.res_type=="pptx"'></i>
+                    <i class="iconfont icon-word" ng-if='ac.res_type=="doc" || ac.res_type=="docx"'></i>
+                    <i class="iconfont icon-excel" ng-if='ac.res_type=="xls" || ac.res_type=="xlsx"'></i>
+                    <i class="iconfont icon-pdf" ng-if='ac.res_type=="pdf"'></i>
+                    <i class="iconfont icon-video" ng-if='ac.res_type=="mp4" || ac.res_type=="wmv"|| ac.res_type=="avi"'></i>
+                    <i class="iconfont icon-audio" ng-if='ac.res_type=="mp3"'></i>
+                    <i class="iconfont icon-movie" ng-if='ac.res_type=="movie"'></i>
+                    <i class="iconfont icon-courses" ng-if='ac.res_type=="course"'></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <a ng-if="hasMore" ng-click="getActivities()" class="load-more">点击加载更多</a>
+        <div ng-if="emptyList" class="empty-msg">
+          <img src="assets/images/empty/01.png">
+          <p>还没有动态更新哦!</p>
+        </div>
+      </div>
+
+    </section>
+
+
+    <yoya-aside aside="ctrl.aside"></yoya-aside>
+    <div ng-click="hideAside()" class="asideMask"></div>
+
+  </main>
+</body>
+
+</html>

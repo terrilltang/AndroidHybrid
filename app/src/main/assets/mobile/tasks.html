@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>学习难点</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/tasks.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="tasksCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="">
+    <header>
+      <a href="javascript:void(0);" class="opt prev" ng-click="showAside()">
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <div class="title">
+        <h1>学习难点</h1>
+      </div>
+    </header>
+    <section>
+      <div class="tasks-list">
+        <!-- TODO: 封面判断修改 -->
+        <div ng-repeat="task in tasks track by $index" class="list-item">
+          <div ng-click="getDetail(task)" ng-if="!isfile(task)" class="cover clipCover">
+            <img ng-if="!task.ICON_URl && isMovie(task)" src="assets/images/ex-movie.png">
+            <img ng-if="!task.ICON_URl && !isImg(task) && !isMovie(task)" src="assets/images/ex-movie.png">
+            <img ng-if="!task.ICON_URl && isImg(task)" src="assets/images/ex-img.png">
+            <img ng-if="task.ICON_URl" ng-src="{{task.ICON_URl}}">
+          </div>
+          <div ng-click="getDetail(task)" ng-if="isfile(task)" class="cover">
+            <img ng-if="task.RES_TYPE=='doc'||task.RES_TYPE=='docx'" src="assets/images/cover-word.png">
+            <img ng-if="task.RES_TYPE=='xls'||task.RES_TYPE=='xlsx'" src="assets/images/cover-excel.png">
+            <img ng-if="task.RES_TYPE=='ppt'||task.RES_TYPE=='pptx'" src="assets/images/cover-ppt.png">
+            <img ng-if="task.RES_TYPE=='pdf'" src="assets/images/cover-pdf.png">
+            <div ng-class="{'status-1':task.learn_state=='1'}" class="status">{{task.learn_state_desc}}</div>
+          </div>
+          <div class="desc">
+            <div ng-click="getDetail(task)" class="title">{{task.COURSE_NAME}}</div>
+            <div class="time">学习时间：{{task.FEEDBACK_TIME | yoyaDate:'YYYY/MM/DD hh:mm:ss'}}</div>
+            <div class="authorDetail">
+              <img ng-if="task.head_url" ng-src="{{task.head_url}}" class="avatarImg" fail-back-url="avatar/avatar-1.png">
+              <img ng-if="!task.head_url" src="assets/images/avatar/avatar-1.png" class="avatarImg">
+              <span>{{task.USER_NAME}}</span>
+            </div>
+            <div class="removeTask" ng-click="delTask(task.FEEDBACK_ID)">
+              <span class="iconfont icon-edit"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0);" ng-if="hasMore" ng-click="getTasks()" class="load-more">点击加载更多</a>
+      <div ng-if="emptyList" class="empty-msg">
+        <img src="assets/images/empty/01.png">
+        <p>暂无学习难点哦!</p>
+      </div>
+    </section>
+    <div ng-if="showIntro" ng-click="hideIntro();" class="intro">
+      <img src="assets/images/arrow-intro.png" class="arrow-intro">
+      <p>所有标记为困难的课程
+        <br>都会反馈在学习难点中,
+        <br>掌握后可修改学习反馈删除该记录哦!</p>
+      <img src="assets/images/smile.png" class="smile">
+    </div>
+    <yoya-aside aside="ctrl.aside"></yoya-aside>
+    <div ng-click="hideAside()" class="asideMask"></div>
+
+
+    <!--移除难点-->
+    <div ng-class="{'enter':ctrl.dialog.show,'out':!ctrl.dialog.show}" class="popup dialog" ng-if='ctrl.dialog.show'>
+      <s ng-click="ctrl.dialog.closeFun()"></s>
+      <div class="popup-wrap">
+        <div class="popup-content">
+          <s></s>
+          <span class="title">{{ctrl.dialog.title}}</span>
+          <p class="des">{{ctrl.dialog.des}}</p>
+          <div class="choose-option">
+            <span class="easy" ng-class="{'curr':level=='01'}" ng-click="updateLevel('01')">简单</span>
+            <span class="normal" ng-class="{'curr':level=='02'}" ng-click="updateLevel('02')">一般</span>
+          </div>
+          <div class="dialog-btn">
+            <label for="btn1" ng-if="ctrl.dialog.btn1.txt">
+              <button id="btn1" ng-click="ctrl.dialog.btn1.fun()">{{ctrl.dialog.btn1.txt}}</button>
+            </label>
+            <label for="btn2" ng-if="ctrl.dialog.btn2.txt">
+              <button id="btn2" ng-click="ctrl.dialog.btn2.fun()">{{ctrl.dialog.btn2.txt}}</button>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

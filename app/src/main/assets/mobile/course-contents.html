@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>课程内容</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="./assets/js/lib/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/pages/course-contents.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+    <main ng-controller="contentsCtrl as ctrl" class="no-footer">
+        <header>
+            <a href="javascript:void(0);" class="opt prev" ng-click="back()">
+                <i class="iconfont icon-arrow-left"></i>
+            </a>
+            <div class="title">
+                <h1>
+                    课程内容
+                </h1>
+            </div>
+        </header>
+
+        <section>
+            <div class="course-content-list">
+                <div class='list-item' ng-repeat="content in contents track by $index" ng-click="getDetail(content)">
+                    <div ng-if="!isfile(content)" class="cover clipCover">
+                        <img ng-if="!content.full_icon_url && isMovie(content)" src="assets/images/ex-movie.png">
+                        <img ng-if="!content.full_icon_url && isImg(content)" src="assets/images/ex-img.png">
+                        <img ng-if="!content.full_icon_url && !isImg(content) && !isMovie(content)" src="assets/images/ex-movie.png">
+                        <img ng-if="content.full_icon_url" ng-src="{{content.full_icon_url}}">
+                    </div>
+                    <div ng-if="isfile(content)" class="cover">
+                        <img ng-if="content.RES_TYPE=='doc'||content.RES_TYPE=='docx'" src="assets/images/cover-word.png">
+                        <img ng-if="content.RES_TYPE=='xls'||content.RES_TYPE=='xlsx'" src="assets/images/cover-excel.png">
+                        <img ng-if="content.RES_TYPE=='ppt'||content.RES_TYPE=='pptx'" src="assets/images/cover-ppt.png">
+                        <img ng-if="content.RES_TYPE=='pdf'" src="assets/images/cover-pdf.png">
+                    </div>
+                    <div class="desc">
+                        <span ng-if="!content.FEEDBACK_ID" class="status unfinished">未学</span>
+                        <span ng-if="content.FEEDBACK_ID" class="status finished">已学</span>
+                        <span class="title">{{content.COURSE_NAME}}</span>
+                    </div>
+                </div>
+            </div>
+            <a href="" ng-if="hasMore" ng-click="getContents()" class="load-more">点击加载更多</a>
+        </section>
+    </main>
+</body>
+
+</html>

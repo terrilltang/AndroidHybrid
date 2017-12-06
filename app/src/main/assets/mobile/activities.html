@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>我的课程</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/activities.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="activitiesCtrl as ctrl" ng-class="{ 'asideView': asideView }" class="no-footer">
+    <header>
+      <a href="javascript:void(0);" class="opt prev" ng-click="showAside()">
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <div class="title">
+        <h1>我的活动</h1>
+      </div>
+    </header>
+    <section class="activities-container disable-scroll">
+
+      <div class="tabs">
+        <a ng-class="{'curr':currStatus=='01'}" ng-click="getComs('01')">
+          <span>待完成</span>
+        </a>
+        <a ng-class="{'curr':currStatus=='02'}" ng-click="getComs('02')">
+          <span>已完成</span>
+        </a>
+        <a ng-class="{'curr':currStatus=='03'}" ng-click="getComs('03')">
+          <span>已过期</span>
+        </a>
+      </div>
+      <div class="activities-wrapper">
+        <ul class="activities-item">
+          <li ng-repeat="com in coms track by $index" ng-click="getDetail(com)" ng-if="currStatus=='01'" ng-class="{'ing':com.news_status=='01' && com.deadline_time.substr(0,8)>=today}">
+            <!-- 完成-->
+            <p class="content">
+              <span class="status" ng-if="com.work_status=='04'">
+                <i class="iconfont icon-statusbg"></i>
+                <i class="txt">已退回</i>
+              </span>
+              {{com.activity_title}}</p>
+            <div class="desc">
+              <span class="author">
+                <img src="assets/images/avatar/avatar-1.png" ng-if="!com.head_url" class="avatar">
+                <img ng-src="{{com.head_url}}" fail-back-url="avatar/avatar-1.png" ng-if="com.head_url" class="avatar">
+                <span class="name">{{com.user_name}}</span>
+              </span>
+              <div class="endTime" ng-if="com.deadline_time!=''">
+                <i class="iconfont icon-time-empty"></i>{{com.deadline_time | yoyaDate:'YYYY/MM/DD'}}截止
+              </div>
+            </div>
+          </li>
+          <li ng-repeat="com in coms track by $index" ng-click="getDetail(com)" ng-if="currStatus=='02'" ng-class="{'com':com.news_status=='02'}">
+
+            <!-- 完成的-->
+            <p class="content">
+              <!--<span class="status">
+            <i class="iconfont icon-statusbg"></i>
+            <i class="txt">已退回</i>
+          </span>-->
+              {{com.activity_title}}</p>
+            <div class="desc">
+              <span class="author">
+                <img src="assets/images/avatar/avatar-1.png" ng-if="!com.head_url" class="avatar">
+                <img ng-src="{{com.head_url}}" fail-back-url="avatar/avatar-1.png" ng-if="com.head_url" class="avatar">
+                <span class="name">{{com.user_name}}</span>
+              </span>
+              <div class="endTime" ng-if="com.deadline_time!=''">
+                <i class="iconfont icon-time-empty"></i>{{com.deadline_time | yoyaDate:'YYYY/MM/DD'}}截止
+              </div>
+            </div>
+
+
+          </li>
+          <li ng-repeat="com in coms track by $index" ng-click="getDetail(com)" ng-if="currStatus=='03'" ng-class="{'end': currStatus=='03'}">
+
+            <!-- 结束，过期的-->
+            <p class="content">
+              <!--<span class="status">
+            <i class="iconfont icon-statusbg"></i>
+            <i class="txt">已退回</i>
+          </span>-->
+              {{com.activity_title}}
+            </p>
+            <div class="desc">
+              <span class="author">
+                <img src="assets/images/avatar/avatar-1.png" ng-if="!com.head_url" class="avatar">
+                <img ng-src="{{com.head_url}}" fail-back-url="avatar/avatar-1.png" ng-if="com.head_url" class="avatar">
+                <span class="name">{{com.user_name}}</span>
+              </span>
+              <div class="endTime">
+                <i class="iconfont icon-time-empty"></i>{{com.deadline_time | yoyaDate:'YYYY/MM/DD'}}截止
+              </div>
+            </div>
+          </li>
+        </ul>
+        <a ng-if="hasMore" ng-click="getComs(currStatus)" class="load-more">点击加载更多</a>
+        <div ng-if="emptyList" class="empty-msg">
+          <img src="assets/images/empty/01.png">
+          <p ng-if="currStatus=='01'">您目前没有‘待完成’活动哦!</p>
+          <p ng-if="currStatus=='02'">您目前没有‘已完成’活动哦!</p>
+          <p ng-if="currStatus=='03'">您目前没有‘已结束’活动哦!</p>
+        </div>
+      </div>
+    </section>
+    <yoya-aside aside="ctrl.aside"></yoya-aside>
+    <div ng-click="hideAside()" class="asideMask"></div>
+  </main>
+</body>
+
+</html>

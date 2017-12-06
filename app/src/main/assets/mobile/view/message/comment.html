@@ -1,0 +1,25 @@
+<div class="message-list" ng-if='!emptyReviews'>
+    <div class="item" ng-repeat="com in reviews track by $index" ng-click="viewWork(com)">
+        <div class="avatar">
+            <img src="assets/images/avatar/avatar-1.png" ng-if="!com.head_url">
+            <img ng-src="{{com.head_url}}" fail-back-url="avatar/avatar-1.png" ng-if="com.head_url">
+        </div>
+        <div class="desc">
+            <div class="line-1">
+                <span class="name">{{com.user_name}}</span>
+                <span class="from">在
+                    <span>{{com.topic_name}}</span>评论：</span>
+            </div>
+            <div class="line-2">
+                <span class="time">{{com.comment_time | yoyaDate:'YYYY/MM/DD hh:mm:ss'}}</span>
+            </div>
+            <p class="content">{{com.comment_content}}</p>
+        </div>
+    </div>
+    <a ng-if="hasMoreReviews" ng-click="getReviews()" class="load-more">点击加载更多</a>
+    <a ng-if="!hasMoreReviews && reviewsCount" class="load-more">已没有更多</a>
+</div>
+<div ng-if="emptyReviews" class="empty-msg">
+    <img src="assets/images/empty/02.png">
+    <p>还没有评论</p>
+</div>

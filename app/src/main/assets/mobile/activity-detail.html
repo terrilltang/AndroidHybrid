@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>活动详情</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script src="./assets/js/lib/angular.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages/activity-detail.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+  <main ng-controller="activityDetailCtrl as ctrl" ng-class="{'no-footer':!tabs.review}">
+    <form name="work_form" novalidate>
+      <header>
+        <a href="javascript:void(0);" class="opt prev" ng-click="backUrl()">
+          <i class="iconfont icon-arrow-left"></i>
+        </a>
+
+        <a href="javascript:void(0);" ng-click="complete()" ng-if="!activityDetail.work_desc && (activityDetail.deadline_time=='' || activityDetail.deadline_time.substr(0,8)>=today) && tabs.workSubmit"
+          class="opt next">完成</a>
+        <a href="javascript:void(0);" ng-click="complete()" ng-if="reedit=='false' && (activityDetail.deadline_time=='' || activityDetail.deadline_time.substr(0,8)>=today) && tabs.workSubmit"
+          class="opt next">完成</a>
+        <a href="javascript:void(0);" ng-click="recall()" ng-if="activityDetail.work_status=='04' && reedit=='true'" class="opt next">重新编辑</a>
+
+        <div class="title">
+          <h1>作品详情</h1>
+        </div>
+      </header>
+
+      <section class="activity-detail-container">
+        <div class="activity-contain">
+          <div class="title">
+            <span class="text">{{activityDetail.activity_title}}</span>
+          </div>
+          <div class="time" ng-if="activityDetail.deadline_time!=''">
+            <span class="iconfont icon-time-empty"></span>
+            <span>{{activityDetail.deadline_time | yoyaDate:'YYYY/MM/DD'}} 截止</span>
+          </div>
+          <div class="des">
+            <p>{{activityDetail.activity_content}}</p>
+          </div>
+          <div ng-if="activityDetail.attachment_path" class="att">
+            <a ng-click="viewAtt(activityDetail.attachment_path,activityDetail.attachment_name)">
+              <span class="iconfont icon-att"></span>
+              <span ng-if="activityDetail.attachment_name" class="file">{{activityDetail.attachment_name}}</span>
+              <span class="iconfont icon-enter"></span>
+            </a>
+          </div>
+          <div ng-if="activityDetail.deadline_time!='' && activityDetail.deadline_time.substr(0,8)<today" class="endFlag">
+            <img src="assets/images/endFlag.png">
+          </div>
+        </div>
+
+        <div class="tabs">
+          <a href="#" ng-class="{'curr':tabs.workSubmit}" ng-click="viewSubmitWork()">
+            <span>提交</span>
+          </a>
+          <a href="#" ng-class="{'curr':tabs.review}" ng-click="viewWriteReview()">
+            <span ng-if="reviewsCount">评论({{reviewsCount}})</span>
+            <span ng-if="!reviewsCount">评论</span>
+          </a>
+        </div>
+
+        <div class="tabs-content" ng-if="tabs.review">
+          <div class="reviews">
+            <div class="reviews-list">
+              <div class="list-item" ng-repeat="review in reviews track by $index" ng-if="reviewsCount">
+                <div class="item-author">
+                  <div class="avatar">
+                    <img src="./assets/images/avatar-null.png" ng-if="!review.head_url">
+                    <img ng-src="{{review.head_url}}" ng-if="review.head_url">
+                  </div>
+                  <div class="info">
+                    <span class="name">{{review.user_name}}</span>
+                    <span class="time">{{review.comment_time | yoyaDate:'YYYY/MM/DD hh:mm:ss' }}</span>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <p>{{review.comment_content}}</p>
+                </div>
+              </div>
+
+              <div class="load-more" ng-click="getReviews()" ng-if="hasMoreViews && reviewsCount">查看更多</div>
+              <div class="load-more" ng-click="" ng-if="!hasMoreViews && reviewsCount">已没有更多</div>
+
+              <div ng-if='!reviewsCount' class="empty-msg">
+                <img src="assets/images/empty/02.png">
+                <p>还没有评论哦！</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tabs-content" ng-if="tabs.workSubmit">
+          <div ng-if="reedit=='false' || !activityDetail.work_desc && (activityDetail.deadline_time=='' || activityDetail.deadline_time.substr(0,8)>=today)"
+            class="works">
+            <!--<div class="title"><span class="iconfont icon-comment"></span><span>作品描述</span></div>-->
+            <div class="des">
+              <label for="works-des">
+                <textarea id="works-des" name="works-des" ng-model="workForm.work_desc" ng-change="checkCharsets()" placeholder="请输入对作品的描述"></textarea>
+              </label>
+              <span class="count">还可以输入:{{140-workForm.work_desc.length}}个字</span>
+            </div>
+            <div class="attachment">
+              <div class="att">
+                <div ng-click="chooseWork()">
+                  <span class="iconfont icon-add"></span>
+                  <span class="file">添加我的作品</span>
+                  <span class="icon">
+                    <i class="iconfont icon-enter"></i>
+                  </span>
+                </div>
+                <div ng-repeat="work in works track by $index">
+                  <span class="iconfont icon-att"></span>
+                  <span class="file">{{work.name}}</span>
+                  <span class="icon" ng-click="removeWorks(work)">
+                    <i class="iconfont icon-trash"></i>
+                  </span>
+                </div>
+                <div ng-repeat="photo in photos track by $index">
+                  <span class="iconfont icon-att"></span>
+                  <span class="file">{{photo.fileName}}</span>
+                  <span class="icon" ng-click="removePhotos($index)">
+                    <i class="iconfont icon-trash"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-if="reedit=='true' && activityDetail.work_desc" class="works">
+            <div class="time">
+              <span class="iconfont icon-select"></span>
+              <span>{{activityDetail.submit_time | yoyaDate:'YYYY/MM/DD'}} 提交</span>
+            </div>
+            <div class="des">
+              <p>{{activityDetail.work_desc}}</p>
+            </div>
+            <div class="attachment">
+              <div class="att">
+                <div ng-repeat="att in activityDetail.worklist track by $index" ng-click="viewAtt(att.work_path,att.work_name)">
+                  <span class="iconfont icon-att"></span>
+                  <span class="file">{{att.work_name}}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div ng-if="!activityDetail.work_desc && canDo" class="made-work">
+            <a href="#" ng-click="goAddMovie()">直接去制作互动电影></a>
+          </div>
+        </div>
+      </section>
+    </form>
+    <footer ng-if="tabs.review">
+      <form name="reviewsForm" novalidate>
+        <label for="write" class="write">
+          <input id="write" placeholder="写下你想说的" ng-model="reviewForm.content">
+        </label>
+        <label for="submitReview" class="submit">
+          <button id="submitReview" ng-click="addReview()">发送</button>
+        </label>
+      </form>
+    </footer>
+
+
+    <div class="upload-dialog" ng-class="{'enter':showUploadDialog,'out':!showUploadDialog}" ng-if="showChoose">
+      <s ng-click="hideChoose()"></s>
+      <div class="dialog-btns">
+        <div class="dialog-btn">
+          <label for="add-att" ng-if="!androidApp">
+            <span class="button">本机作品</span>
+            <input id="add-att" type="file" ng-model="fileObj">
+          </label>
+          <label ng-if="androidApp" ng-click="andChooseFile()">
+            <span class="button">本机作品</span>
+          </label>
+          <label for="btn2">
+            <button id="btn2" ng-click="chooseMyWork()">我的作品</button>
+          </label>
+        </div>
+        <div class="dialog-btn">
+          <label for="btn3">
+            <button id="btn3" ng-click="hideChoose()">取消</button>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</body>
+
+</html>

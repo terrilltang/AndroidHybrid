@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>课程详情</title>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="./assets/js/lib/angular.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/pages/course-detail.js"></script>
+</head>
+
+<body ng-app="ngApp" ng-cloak>
+    <main ng-controller="courseDetailCtrl as ctrl" ng-class="{'no-footer':tabs.desc}">
+        <form name="feedback_form" novalidate>
+            <header>
+                <a href="javascript:void(0)" class="opt prev" ng-click="clickBack()">
+                    <i class="iconfont icon-arrow-left"></i>
+                </a>
+                <div class="title">
+                    <h1>{{courseDes.course_name}}</h1>
+                </div>
+            </header>
+            <section class="disable-scroll">
+                <div class="course-content-play" ng-if='playObj.type=="mp4" || playObj.type=="avi" || playObj.type=="wmv" || playObj.type=="mp3"'>
+                    <video src='' controls id='video' autoplay></video>
+                </div>
+                <div class="course-content-detail" ng-if='!(playObj.type=="mp4" || playObj.type=="avi" || playObj.type=="wmv" || playObj.type=="mp3")'>
+                    <div class="cover">
+                        <div class="cover-img">
+                            <img ng-src='{{content.course.icon_url}}'>
+                        </div>
+                        <div class="cover-icon" ng-if='playObj'>
+                            <i class="iconfont icon-img" ng-if='playObj.type=="jpg" || playObj.type=="jpeg" || playObj.type=="gif" || playObj.type=="png"'></i>
+                            <i class="iconfont icon-ppt" ng-if='playObj.type=="ppt" || playObj.type=="pptx"'></i>
+                            <i class="iconfont icon-word" ng-if='playObj.type=="doc" || playObj.type=="docx"'></i>
+                            <i class="iconfont icon-excel" ng-if='playObj.type=="xls" || playObj.type=="xlsx"'></i>
+                            <i class="iconfont icon-pdf" ng-if='playObj.type=="pdf"'></i>
+                            <i class="iconfont icon-video" ng-if='playObj.type=="mp4" || playObj.type=="wmv"|| playObj.type=="avi"'></i>
+                            <i class="iconfont icon-audio" ng-if='playObj.type=="mp3"'></i>
+                            <i class="iconfont icon-movie" ng-if='playObj.type=="movie"'></i>
+                        </div>
+                    </div>
+                    <div class="title">
+                        {{content.course.COURSE_NAME}}
+                    </div>
+                    <div class="opt">
+                        <a href="javascript:void(0);" ng-click='viewDetail()'>
+                            <i class="iconfont icon-play"></i>
+                            <span>查看/播放</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="tabs" ng-class="{'three':courseDes.course_status=='02'}">
+                    <a href="javascript:void(0);" ng-class="{'curr':tabs.desc}" ng-click="viewDesc()">
+                        <span>简介</span>
+                    </a>
+                    <a href="javascript:void(0);" ng-class="{'curr':tabs.menu}" ng-click="viewMenus()">
+                        <span>目录</span>
+                    </a>
+                    <a href="javascript:void(0);" ng-class="{'curr':tabs.review}" ng-click="viewReviews()" ng-if="courseDes.course_status=='02'">
+                        <span ng-if="reviewsCount">评论({{reviewsCount}})</span>
+                        <span ng-if="!reviewsCount">评论</span>
+                    </a>
+                </div>
+                <div class="tabs-content" ng-if="tabs.desc">
+                    <div class="desc">
+                        <div class="desc-title">
+                            <div class="title">{{courseDes.course_name}}</div>
+                            <div class="profile">
+                                <span>{{courseDes.user_name}}</span>
+                                <span>已有{{courseDes.learn_count}}人学习</span>
+                            </div>
+                            <div class="status finished" ng-if="courseDes.is_finished=='1' && courseDes.res_name">
+                                <span class="icon">
+                                    <i class="iconfont icon-time-empty"></i>
+                                </span>
+                                <span class="txt">学习中</span>
+                            </div>
+                            <div class="status" ng-class="{'finished':isFinished=='2'}" ng-if="courseDes.is_finished=='2' && courseDes.res_name">
+                                <span class="icon">
+                                    <i class="iconfont icon-complete"></i>
+                                </span>
+                                <span class="txt">已学过</span>
+                            </div>
+                        </div>
+                        <div class="desc-content">
+                            <div class="title">课程简介</div>
+                            <div class="content">
+                                <p>{{courseDes.course_desc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tabs-content" ng-if="tabs.menu">
+                    <div class="directory">
+                        <div class="first" ng-repeat="dir in courseDir">
+                            <div class="first-title">{{dir.course_cat_name}}</div>
+                            <div class="fourth" ng-if="dir.courseResList.length">
+                                <div class="fourth-title" ng-repeat="det in dir.courseResList" ng-click="updateLearn(det,dir)">
+                                    <span>
+                                        <i class="iconfont icon-pdf" ng-if="det.res_type=='pdf'"></i>
+                                        <i class="iconfont icon-ppt" ng-if="det.res_type=='ppt' || det.res_type=='pptx'"></i>
+                                        <i class="iconfont icon-excel" ng-if="det.res_type=='xls' || det.res_type=='xlsx'"></i>
+                                        <i class="iconfont icon-word" ng-if="det.res_type=='doc' || det.res_type=='docx'"></i>
+                                        <i class="iconfont icon-video" ng-if="det.res_type=='mp4' || det.res_type=='wmv' || det.res_type=='avi'"></i>
+                                        <i class="iconfont icon-movie" ng-if="det.res_type=='movie'"></i>
+                                        <i class="iconfont icon-img" ng-if="det.res_type=='jpg' || det.res_type=='jpeg' || det.res_type=='png' || det.res_type=='gif'"></i>
+                                        <i class="iconfont icon-audio" ng-if="det.res_type=='mp3'"></i>
+                                    </span>
+
+                                    <span class="txt" ng-class="{'curr':playObj.url && playObj.id==det.course_res_id}">{{det.res_name}}</span>
+                                    <span class="status" ng-if="det.isStudied!='0'">
+                                        <i class="iconfont icon-complete"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="second" ng-repeat="cha in dir.courseChildMenuList">
+                                <div class="second-title">{{cha.course_cat_name}}</div>
+                                <div class="fourth" ng-if="cha.courseResList.length">
+                                    <div class="fourth-title" ng-repeat="det in cha.courseResList" ng-click="updateLearn(det,dir)">
+                                        <span>
+                                            <i class="iconfont icon-pdf" ng-if="det.res_type=='pdf'"></i>
+                                            <i class="iconfont icon-ppt" ng-if="det.res_type=='ppt' || det.res_type=='pptx'"></i>
+                                            <i class="iconfont icon-excel" ng-if="det.res_type=='xls' || det.res_type=='xlsx'"></i>
+                                            <i class="iconfont icon-word" ng-if="det.res_type=='doc' || det.res_type=='docx'"></i>
+                                            <i class="iconfont icon-video" ng-if="det.res_type=='mp4' || det.res_type=='wmv' || det.res_type=='avi'"></i>
+                                            <i class="iconfont icon-movie" ng-if="det.res_type=='movie'"></i>
+                                            <i class="iconfont icon-img" ng-if="det.res_type=='jpg' || det.res_type=='jpeg' || det.res_type=='png' || det.res_type=='gif'"></i>
+                                            <i class="iconfont icon-audio" ng-if="det.res_type=='mp3'"></i>
+                                        </span>
+
+                                        <span class="txt" ng-class="{'curr':playObj.url && playObj.id==det.course_res_id}">{{det.res_name}}</span>
+                                        <span class="status" ng-if="det.isStudied!='0'">
+                                            <i class="iconfont icon-complete"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="third" ng-repeat="les in cha.courseChildMenuList">
+                                    <div class="third-title">{{les.course_cat_name}}</div>
+                                    <div class="fourth" ng-if="les.courseResList.length">
+                                        <div class="fourth-title" ng-repeat="det in les.courseResList" ng-click="updateLearn(det,dir)">
+                                            <span>
+                                                <i class="iconfont icon-pdf" ng-if="det.res_type=='pdf'"></i>
+                                                <i class="iconfont icon-ppt" ng-if="det.res_type=='ppt' || det.res_type=='pptx'"></i>
+                                                <i class="iconfont icon-excel" ng-if="det.res_type=='xls' || det.res_type=='xlsx'"></i>
+                                                <i class="iconfont icon-word" ng-if="det.res_type=='doc' || det.res_type=='docx'"></i>
+                                                <i class="iconfont icon-video" ng-if="det.res_type=='mp4' || det.res_type=='wmv' || det.res_type=='avi'"></i>
+                                                <i class="iconfont icon-movie" ng-if="det.res_type=='movie'"></i>
+                                                <i class="iconfont icon-img" ng-if="det.res_type=='jpg' || det.res_type=='jpeg' || det.res_type=='png' || det.res_type=='gif'"></i>
+                                                <i class="iconfont icon-audio" ng-if="det.res_type=='mp3'"></i>
+                                            </span>
+                                            <span class="txt" ng-class="{'curr':playObj.url && playObj.id==det.course_res_id}">{{det.res_name}}</span>
+                                            <span class="status" ng-if="det.isStudied!='0'">
+                                                <i class="iconfont icon-complete"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tabs-content" ng-if="tabs.review && courseDes.course_status=='02'">
+                    <div class="reviews">
+                        <div class="reviews-list">
+                            <div class="list-item" ng-repeat="review in reviews track by $index" ng-if="reviewsCount">
+                                <div class="item-author">
+                                    <div class="avatar">
+                                        <img src="./assets/images/avatar-null.png" ng-if="!review.head_url">
+                                        <img ng-src="{{review.head_url}}" ng-if="review.head_url">
+                                    </div>
+                                    <div class="info">
+                                        <span class="name">{{review.user_name}}</span>
+                                        <span class="time">{{review.comment_time | yoyaDate:'YYYY/MM/DD hh:mm:ss' }}</span>
+                                    </div>
+                                </div>
+                                <div class="item-content">
+                                    <p>{{review.comment_content}}</p>
+                                </div>
+                            </div>
+                            <div class="load-more" ng-if="hasMoreViews && reviewsCount" ng-click="getReviews()">查看更多</div>
+                            <div class="load-more" ng-if="!hasMoreViews && reviewsCount">已没有更多</div>
+                            <div ng-if='!reviewsCount' class="empty-msg">
+                                <img src="assets/images/empty/02.png">
+                                <p>还没有新评论</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+
+        <footer ng-if="!tabs.review && !is_finished">
+            <div class="learn">
+                <label for="learn" ng-click="startLearn()">
+                    <button id="learn">
+                        {{learnTxt}}
+                    </button>
+                </label>
+            </div>
+        </footer>
+        <footer ng-if="tabs.review && courseDes.course_status=='02'">
+            <form name="reviewsForm" novalidate>
+                <label for="write" class="write">
+                    <input id="write" placeholder="写下你想说的" ng-model="reviewForm.content">
+                </label>
+                <label for="submitReview" class="submit" ng-click="addReview()">
+                    <button id="submitReview">发送</button>
+                </label>
+            </form>
+        </footer>
+        <yoya-dialog dialog="ctrl.dialog"></yoya-dialog>
+    </main>
+</body>
+
+</html>
